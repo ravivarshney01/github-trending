@@ -1,5 +1,5 @@
 import React from 'react'
-import './style.css'
+import './styles/main.css'
 import { render } from 'react-dom'
 
 const App = () => {
