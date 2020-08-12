@@ -21,7 +21,7 @@ const App = () => {
   }, [page])
 
   return (
-    <div className='container mx-auto lg:pt-24 lg:pb-64'>
+    <div className='container mx-auto lg:pt-16'>
       <div className='flex flex-wrap'>
         <div className='w-full lg:w-6/12 '>
           <h2 className='text-4xl font-semibold text-black'>Github Trending</h2>
@@ -30,9 +30,6 @@ const App = () => {
           </p>
         </div>
       </div>
-      {/* {repos.map((repo, i) => (
-        <Repository key={i} repo={repo} />
-      ))} */}
       <InfiniteScroll
         dataLength={repos.length}
         next={() => {
