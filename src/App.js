@@ -1,10 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles/main.css'
 import { render } from 'react-dom'
 import Repository from './components/Repository'
+import axios from 'axios'
+import { date30DaysAgo } from './utils/date'
 
 const App = () => {
-  const repos = [{}, {}]
+  const [repos, setRepos] = useState([])
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.github.com/search/repositories?q=created:>${date30DaysAgo()}&sort=stars&order=desc`
+      )
+      .then((res) => {
+        setRepos(res.data.items)
+      })
+    // return () => {
+    //   repos
+    // }
+  }, [])
   return (
     <div className='container mx-auto lg:pt-24 lg:pb-64'>
       <div className='flex flex-wrap'>
