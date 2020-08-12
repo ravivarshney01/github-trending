@@ -4,21 +4,22 @@ import { render } from 'react-dom'
 import Repository from './components/Repository'
 import axios from 'axios'
 import { date30DaysAgo } from './utils/date'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const App = () => {
   const [repos, setRepos] = useState([])
+  const [page, setPage] = useState(1)
   useEffect(() => {
     axios
       .get(
-        `https://api.github.com/search/repositories?q=created:>${date30DaysAgo()}&sort=stars&order=desc`
+        `https://api.github.com/search/repositories?q=created:>${date30DaysAgo()}&sort=stars&order=desc&page=${page}`
       )
       .then((res) => {
-        setRepos(res.data.items)
+        setRepos(repos.concat(res.data.items))
       })
-    // return () => {
-    //   repos
-    // }
-  }, [])
+    return () => repos
+  }, [page])
+
   return (
     <div className='container mx-auto lg:pt-24 lg:pb-64'>
       <div className='flex flex-wrap'>
@@ -29,9 +30,26 @@ const App = () => {
           </p>
         </div>
       </div>
-      {repos.map((repo, i) => (
+      {/* {repos.map((repo, i) => (
         <Repository key={i} repo={repo} />
-      ))}
+      ))} */}
+      <InfiniteScroll
+        dataLength={repos.length}
+        next={() => {
+          setPage(page + 1)
+        }}
+        hasMore
+        loader={<h4>Loading...</h4>}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        {repos.map((repo, i) => (
+          <Repository key={i} repo={repo} />
+        ))}
+      </InfiniteScroll>
     </div>
   )
 }
